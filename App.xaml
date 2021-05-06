@@ -1,0 +1,10 @@
+﻿<Application x:Class="KantorLr6.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:KantorLr6.ViewModels"
+             xmlns:local="clr-namespace:KantorLr6"
+             StartupUri="View/Windows/MainWindow.xaml">
+    <Application.Resources>
+        <vm:ViewModelLocator x:Key="Locator"/>
+    </Application.Resources>
+</Application>
