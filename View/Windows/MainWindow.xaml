@@ -133,6 +133,14 @@
                         </StackPanel>
                         <Button Content="Построить график функции" HorizontalAlignment="Right" Command="{Binding BuildFunctionGraphicCommand}"/>
                         <Button Margin="0,5" Content="Построить график многочлена" HorizontalAlignment="Right" Command="{Binding BuildPolynomGraphicCommand}"/>
+                        <StackPanel Orientation="Horizontal" Margin="0,10">
+                            <TextBlock TextWrapping="Wrap" Text="Максимальное отклонение"/>
+                            <TextBox Margin="5,0" Width="75" Text="{Binding MaxDeviationValue}"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock TextWrapping="Wrap" Text="В точке x = "/>
+                            <TextBox Margin="5,0" Width="75" Text="{Binding MaxDeviationPoint}"/>
+                        </StackPanel>
                     </StackPanel>
                 </Grid>
             </TabItem>

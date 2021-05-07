@@ -103,6 +103,12 @@ namespace KantorLr6.ViewModels
 
 		private string _generateTableStep;
 		public string GenerateTableStep { get => _generateTableStep; set => Set(ref _generateTableStep, value); }
+
+		private string _maxDeviationValue;
+		public string MaxDeviationValue { get => _maxDeviationValue; set => Set(ref _maxDeviationValue, value); }
+
+		private string _maxDeviationPoint;
+		public string MaxDeviationPoint { get => _maxDeviationPoint; set => Set(ref _maxDeviationPoint, value); }
 		#endregion
 
 		#region Commands
@@ -305,11 +311,12 @@ namespace KantorLr6.ViewModels
 				double right = Convert.ToDouble(ArgumentRightBoard);
 				double step = Convert.ToDouble(Step);
 				Status = "Строю...";
-				for (double i = left; i < right; i += step)
+				for (double i = left; i <= right; i += step)
 				{
 					expression = new Expression($"f({i.ToString().Replace(",", ".")})", f);
 					PointsFunction.Add(new Point(i, expression.calculate()));
 				}
+				FindMaxDeviation();
 				Status = "График функции построен";
 			}
 			catch (Exception e)
@@ -346,7 +353,7 @@ namespace KantorLr6.ViewModels
 					_newton.Arguments = (double[])args.Clone();
 					_newton.Values = (double[])values.Clone();
 					List<double> otherArgs = new List<double>();
-					for (double i = left; i < right; i += step)
+					for (double i = left; i <= right; i += step)
 					{
 						otherArgs.Add(i);
 					}
@@ -355,7 +362,8 @@ namespace KantorLr6.ViewModels
 					{
 						PointsPolynom.Add(new Point(otherArgs[i], polynomValues[i]));
 					}
-					Status = "График многочлена построен";
+					FindMaxDeviation();
+				Status = "График многочлена построен";
 				}	
 				else
 					Status = "График длжна быть построена таблица";
@@ -382,7 +390,7 @@ namespace KantorLr6.ViewModels
 				SelectedPoint = null;
 				Function f = new Function(FunctionText);
 				Expression expression;
-				for (double i = left; i < right; i += step)
+				for (double i = left; i <= right; i += step)
 				{
 					expression = new Expression($"f({i.ToString().Replace(",", ".")})", f);
 					LagrangeTable.Add(new Point(i, expression.calculate()));
@@ -399,5 +407,27 @@ namespace KantorLr6.ViewModels
 			return !(string.IsNullOrWhiteSpace(GenerateTableLeftBoard) || string.IsNullOrWhiteSpace(GenerateTableRightBoard) || string.IsNullOrWhiteSpace(GenerateTableStep) || string.IsNullOrWhiteSpace(FunctionText));
 		}
 		#endregion
+
+		private void FindMaxDeviation()
+		{
+			MaxDeviationPoint = "";
+			MaxDeviationValue = "";
+			if (PointsFunction.Count != PointsPolynom.Count)
+				return;
+			double maxPoint = PointsFunction[0].X;
+			double maxValue = Math.Abs(PointsFunction[0].Y - PointsPolynom[0].Y);
+			double currentMaxValue;
+			for (int i = 1; i < PointsFunction.Count; i++)
+			{
+				currentMaxValue = Math.Abs(PointsFunction[i].Y - PointsPolynom[i].Y);
+				if (currentMaxValue > maxValue)
+				{
+					maxValue = currentMaxValue;
+					maxPoint = PointsFunction[i].X;
+				}
+			}
+			MaxDeviationPoint = maxPoint.ToString();
+			MaxDeviationValue = maxValue.ToString();
+		}
 	}
 }
