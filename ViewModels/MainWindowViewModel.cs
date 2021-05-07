@@ -22,16 +22,19 @@ namespace KantorLr6.ViewModels
 		private NewtonInterpolationPolynomial _newton;
 		public MainWindowViewModel()
 		{
-			FunctionText = "f(x) = x^2";
-			Function f = new Function(FunctionText);
-			Expression expression;
+			//FunctionText = "f(x) = x^2";
+			//Function f = new Function(FunctionText);
+			//Expression expression;
 
-			Status = "Строю...";
-			for (double i = -100; i < 101; i += 1)
-			{
-				expression = new Expression($"f({i})", f);
-				PointsFunction.Add(new Point(i, expression.calculate()));
-			}
+			//expression = new Expression("f(2.5)", f);
+			//double num = expression.calculate();
+
+			//Status = "Строю...";
+			//for (double i = -100; i < 101; i += 0.1)
+			//{
+			//	expression = new Expression($"f({i.ToString().Replace(",", ".")})", f);
+			//	PointsFunction.Add(new Point(i, expression.calculate()));
+			//}
 
 
 			_lagrange = new LagrangeInterpolationPolynomial();
@@ -242,7 +245,7 @@ namespace KantorLr6.ViewModels
 				for (int i = 0; i < numbers.Length; i++)
 				{
 					args[i] = Convert.ToDouble(numbers[i]);
-					expression = new Expression($"f({args[i]})", f);
+					expression = new Expression($"f({args[i].ToString().Replace(",", ".")})", f);
 					NewtonTable.Add(new Point(args[i], expression.calculate()));
 				}
 				Status = $"Успешное выполнение";
@@ -309,7 +312,7 @@ namespace KantorLr6.ViewModels
 				Status = "Строю...";
 				for (double i = left; i < right; i += step)
 				{
-					expression = new Expression($"f({i})", f);
+					expression = new Expression($"f({i.ToString().Replace(",", ".")})", f);
 					PointsFunction.Add(new Point(i, expression.calculate()));
 				}
 				Status = "График функции построен";
