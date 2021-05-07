@@ -22,21 +22,6 @@ namespace KantorLr6.ViewModels
 		private NewtonInterpolationPolynomial _newton;
 		public MainWindowViewModel()
 		{
-			//FunctionText = "f(x) = x^2";
-			//Function f = new Function(FunctionText);
-			//Expression expression;
-
-			//expression = new Expression("f(2.5)", f);
-			//double num = expression.calculate();
-
-			//Status = "Строю...";
-			//for (double i = -100; i < 101; i += 0.1)
-			//{
-			//	expression = new Expression($"f({i.ToString().Replace(",", ".")})", f);
-			//	PointsFunction.Add(new Point(i, expression.calculate()));
-			//}
-
-
 			_lagrange = new LagrangeInterpolationPolynomial();
 			_newton = new NewtonInterpolationPolynomial();
 			CalculateFunctionValueInPointCommand = new LambdaCommand(OnCalculateFunctionValueInPointCommandExecuted, CanCalculateFunctionValueInPointCommandExecute);
@@ -49,6 +34,7 @@ namespace KantorLr6.ViewModels
 			RemoveSelectedPointCommand = new LambdaCommand(OnRemoveSelectedPointCommandExecuted, CanRemoveSelectedPointCommandExecute);
 			BuildFunctionGraphicCommand = new LambdaCommand(OnBuildFunctionGraphicCommandExecuted, CanBuildFunctionGraphicCommandExecute);
 			BuildPolynomGraphicCommand = new LambdaCommand(OnBuildPolynomGraphicCommandExecuted, CanBuildPolynomGraphicCommandExecute);
+			GenerateTableCommand = new LambdaCommand(OnGenerateTableCommandExecuted, CanGenerateTableCommandExecute);
 		}
 
 		#region Properties
@@ -108,6 +94,15 @@ namespace KantorLr6.ViewModels
 
 		private string _step;
 		public string Step { get => _step; set => Set(ref _step, value); }
+
+		private string _generateTableLeftBoard;
+		public string GenerateTableLeftBoard { get => _generateTableLeftBoard; set => Set(ref _generateTableLeftBoard, value); }
+
+		private string _generateTableRightBoard;
+		public string GenerateTableRightBoard { get => _generateTableRightBoard; set => Set(ref _generateTableRightBoard, value); }
+
+		private string _generateTableStep;
+		public string GenerateTableStep { get => _generateTableStep; set => Set(ref _generateTableStep, value); }
 		#endregion
 
 		#region Commands
@@ -373,6 +368,35 @@ namespace KantorLr6.ViewModels
 		private bool CanBuildPolynomGraphicCommandExecute(object p)
 		{
 			return NewtonTable.Count > 0 && CanBuildFunctionGraphicCommandExecute(p);
+		}
+
+		public ICommand GenerateTableCommand { get; }
+		private void OnGenerateTableCommandExecuted(object p)
+		{
+			try
+			{
+				double left = Convert.ToDouble(GenerateTableLeftBoard);
+				double right = Convert.ToDouble(GenerateTableRightBoard);
+				double step = Convert.ToDouble(GenerateTableStep);
+				LagrangeTable.Clear();
+				SelectedPoint = null;
+				Function f = new Function(FunctionText);
+				Expression expression;
+				for (double i = left; i < right; i += step)
+				{
+					expression = new Expression($"f({i.ToString().Replace(",", ".")})", f);
+					LagrangeTable.Add(new Point(i, expression.calculate()));
+				}
+				Status = $"Таблица сгенерирована";
+			}
+			catch (Exception e)
+			{
+				Status = $"Опреация провалена. Причина: {e.Message}";
+			}
+		}
+		private bool CanGenerateTableCommandExecute(object p)
+		{
+			return !(string.IsNullOrWhiteSpace(GenerateTableLeftBoard) || string.IsNullOrWhiteSpace(GenerateTableRightBoard) || string.IsNullOrWhiteSpace(GenerateTableStep) || string.IsNullOrWhiteSpace(FunctionText));
 		}
 		#endregion
 	}

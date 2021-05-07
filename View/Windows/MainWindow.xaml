@@ -45,7 +45,7 @@
                                     <Button Content="Сохранить" Margin="5,0" Command="{Binding SaveLagrangeTableCommand}"/>
                                     <Button Content="Восстановить" Command="{Binding RestoreLagrangeTableCommand}"/>
                                 </StackPanel>
-                                <DataGrid MinWidth="200" Width="200" ItemsSource="{Binding LagrangeTable}">
+                                <DataGrid MinWidth="200" Width="200" ItemsSource="{Binding LagrangeTable}" SelectedItem="{Binding SelectedPoint}">
                                     <DataGrid.Columns>
                                         <DataGridTextColumn Header="Аргумент" Binding="{Binding X}"/>
                                         <DataGridTextColumn Header="Значение функции" Width="*" Binding="{Binding Y}"/>
@@ -57,6 +57,19 @@
                                     <TextBlock Margin="0,50,0,10" TextWrapping="Wrap" Text="Значение функции в указанной точке"/>
                                     <TextBox Text="{Binding FunctionValueInPoint, UpdateSourceTrigger=PropertyChanged}"/>
                                     <Button Content="Рассчитать" Margin="0,10" HorizontalAlignment="Center" Command="{Binding CalculateFunctionValueInPointCommand}"/>
+
+                                    <TextBlock TextWrapping="Wrap" Text="Сгенерировать таблицу значений (нужно ввести функцию)"/>
+                                    <StackPanel Orientation="Horizontal" Margin="0,5">
+                                        <TextBlock Text="От"/>
+                                        <TextBox Margin="5,0" Width="50" Text="{Binding GenerateTableLeftBoard, UpdateSourceTrigger=PropertyChanged}"/>
+                                        <TextBlock Text="До" Margin="15,0,0,0"/>
+                                        <TextBox Margin="5,0" Width="50" Text="{Binding GenerateTableRightBoard, UpdateSourceTrigger=PropertyChanged}"/>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal" Margin="0,5">
+                                        <TextBlock Text="Шаг"/>
+                                        <TextBox Margin="5,0" Width="50" Text="{Binding GenerateTableStep, UpdateSourceTrigger=PropertyChanged}"/>
+                                        <Button Content="Сгенерировать" Margin="5,0" Command="{Binding GenerateTableCommand}"/>
+                                    </StackPanel>
                                 </StackPanel>
                             </DockPanel>
                         </GroupBox>
